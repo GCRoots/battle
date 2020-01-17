@@ -32,7 +32,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         }
 
         if (msg instanceof HttpContent) {
-            //这里来做content的相关处理吧
+            //做content的相关处理
             try {
 
                 HttpContent content = (HttpContent) msg;
@@ -48,7 +48,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
                 System.out.println();
                 System.out.println(buf.toString(CharsetUtil.UTF_8));
-
 
                 Data data=JSON.parseObject(inputMessage,Data.class);
 
@@ -66,7 +65,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             }
 
             /*
-             *这中间可以写service,dao等等的东西。,。。感兴趣的话，大家fork一下代码，然后自由发挥就行。
+             *中间写service,dao等等
              * */
 
 
@@ -92,7 +91,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
             }
         }
-
 
         long end = System.nanoTime();
 
