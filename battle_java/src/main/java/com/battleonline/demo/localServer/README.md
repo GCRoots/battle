@@ -1,0 +1,5 @@
+#localServer
+
+用来接收scratch的Python插件推送过来的消息，并将其推送到云端服务器。
+
+即Python插件与云端服务器进行通信的中间件。

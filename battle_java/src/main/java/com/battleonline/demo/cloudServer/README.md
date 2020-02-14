@@ -1,0 +1,3 @@
+#cloudServer
+
+用来接收localServer推送过来的消息，并将其在处理过后推送给相应的localServer。

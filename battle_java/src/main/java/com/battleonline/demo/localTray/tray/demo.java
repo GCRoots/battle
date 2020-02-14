@@ -1,4 +1,4 @@
-package com.battleonline.demo.tray;
+package com.battleonline.demo.localTray.tray;
 
 /**
  * @author shipengfei
