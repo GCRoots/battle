@@ -1,4 +1,4 @@
-package com.battleonline.demo.server;
+package com.battleonline.demo.serverDemo;
 
 import java.io.BufferedReader;
 import java.io.IOException;

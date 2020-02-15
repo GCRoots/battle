@@ -47,6 +47,9 @@ public class QuoteOfTheMomentServerHandler extends SimpleChannelInboundHandler<D
     public void channelRead0(ChannelHandlerContext ctx, DatagramPacket packet) throws Exception {
         System.err.println(packet);
         System.out.println("packet:"+packet.content().toString(CharsetUtil.UTF_8));
+        System.out.println(packet.content());
+        System.out.println(packet.recipient());
+        System.out.println(packet.sender());
         if ("QOTM?".equals(packet.content().toString(CharsetUtil.UTF_8))) {
             ctx.write(new DatagramPacket(
                     Unpooled.copiedBuffer("QOTM: " + nextQuote(), CharsetUtil.UTF_8), packet.sender()));

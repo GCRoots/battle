@@ -1,4 +1,4 @@
-package com.battleonline.demo.server.server;
+package com.battleonline.demo.serverDemo.server;
 
 import com.alibaba.fastjson.JSON;
 import com.battleonline.demo.pojo.Data;
