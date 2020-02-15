@@ -36,7 +36,7 @@ public class demo {
             SystemTray tray = SystemTray.getSystemTray();
 
             // 加载一个图片用于托盘图标的显示
-            Image image = Toolkit.getDefaultToolkit().getImage("./image/1.jpeg");
+            Image image = Toolkit.getDefaultToolkit().getImage("src/main/java/com/battleonline/demo/localTray/tray/image/1.jpeg");
 
             // 创建点击图标时的弹出菜单
             PopupMenu popupMenu = new PopupMenu();
@@ -76,11 +76,16 @@ public class demo {
                     System.out.println("托盘图标被右键点击");
                 }
             });
+
             trayIcon.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     switch (e.getButton()) {
                         case MouseEvent.BUTTON1: {
+                            // 托盘图标被鼠标左键被点击时显示窗口
+                            if (!jf.isShowing()) {
+                                jf.setVisible(true);
+                            }
                             System.out.println("托盘图标被鼠标左键被点击");
                             break;
                         }
