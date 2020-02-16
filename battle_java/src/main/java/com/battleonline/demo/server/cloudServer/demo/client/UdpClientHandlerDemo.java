@@ -1,4 +1,4 @@
-package com.battleonline.demo.cloudServer.demo.client;
+package com.battleonline.demo.server.cloudServer.demo.client;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

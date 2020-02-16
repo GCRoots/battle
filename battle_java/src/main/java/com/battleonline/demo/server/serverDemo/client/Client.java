@@ -1,4 +1,4 @@
-package com.battleonline.demo.serverDemo.client;
+package com.battleonline.demo.server.serverDemo.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;

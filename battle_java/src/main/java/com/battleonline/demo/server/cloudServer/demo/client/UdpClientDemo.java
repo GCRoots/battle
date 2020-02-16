@@ -1,6 +1,5 @@
-package com.battleonline.demo.cloudServer.demo.client;
+package com.battleonline.demo.server.cloudServer.demo.client;
 
-import com.battleonline.demo.cloudServer.demo.server.UdpServerHandlerDemo;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;

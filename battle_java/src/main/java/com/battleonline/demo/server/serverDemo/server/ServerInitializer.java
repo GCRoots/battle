@@ -1,4 +1,4 @@
-package com.battleonline.demo.serverDemo.server;
+package com.battleonline.demo.server.serverDemo.server;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

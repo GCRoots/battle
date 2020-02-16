@@ -38,7 +38,7 @@
     </update>
 
     <delete id="delUser">
-        select *from USER where uuid = #{uuid}
+        delete from USER where uuid = #{uuid}
     </delete>
 
 

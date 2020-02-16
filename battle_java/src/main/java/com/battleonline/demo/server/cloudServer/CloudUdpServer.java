@@ -1,29 +1,48 @@
-package com.battleonline.demo.cloudServer;
+package com.battleonline.demo.server.cloudServer;
 
-import com.battleonline.demo.cloudServer.demo.qotm.QuoteOfTheMomentServerHandler;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author shipengfei
  * @data 2020/2/15
  */
-public class CloudUdpServer {
+@Service
+public class CloudUdpServer implements Runnable{
     private static final int PORT = Integer.parseInt(System.getProperty("port", "7686"));
+    private Thread nserver;
 
-    public static void main(String[] args) throws Exception {
+    @Autowired
+    CloudUdpServerHandler cloudUdpServerHandler;
+
+    @PostConstruct
+    public void init() {
+        nserver = new Thread(this);
+        nserver.start();
+    }
+
+    @Override
+    public void run() {
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             Bootstrap b = new Bootstrap();
             b.group(group)
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
-                    .handler(new CloudUdpServerHandler());
+                    .handler(cloudUdpServerHandler);
 
             b.bind(PORT).sync().channel().closeFuture().await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             group.shutdownGracefully();
         }

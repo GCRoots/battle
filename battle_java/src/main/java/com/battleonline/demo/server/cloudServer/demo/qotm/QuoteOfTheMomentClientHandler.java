@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.battleonline.demo.cloudServer.demo.qotm;
+package com.battleonline.demo.server.cloudServer.demo.qotm;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -27,6 +27,9 @@ public class QuoteOfTheMomentClientHandler extends SimpleChannelInboundHandler<D
         String response = msg.content().toString(CharsetUtil.UTF_8);
         if (response.startsWith("QOTM: ")) {
             System.out.println("Quote of the Moment: " + response.substring(6));
+            ctx.close();
+        }else {
+            System.out.println(response);
             ctx.close();
         }
     }

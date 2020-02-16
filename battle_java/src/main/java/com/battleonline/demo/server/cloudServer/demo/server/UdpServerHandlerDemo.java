@@ -1,4 +1,4 @@
-package com.battleonline.demo.cloudServer.demo.server;
+package com.battleonline.demo.server.cloudServer.demo.server;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

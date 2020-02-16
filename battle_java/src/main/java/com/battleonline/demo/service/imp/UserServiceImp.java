@@ -21,16 +21,16 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void insertUser(User user) {
-
+        userMapper.insertUser(user);
     }
 
     @Override
     public void updateUser(User user) {
-
+        userMapper.updateUser(user);
     }
 
     @Override
     public void delUser(String uuid) {
-
+        userMapper.delUser(uuid);
     }
 }

@@ -1,4 +1,4 @@
-package com.battleonline.demo.serverDemo.server;
+package com.battleonline.demo.server.serverDemo.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;

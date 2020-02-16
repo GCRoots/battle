@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.battleonline.demo.cloudServer.demo.qotm;
+package com.battleonline.demo.server.cloudServer.demo.qotm;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -51,7 +51,7 @@ public final class QuoteOfTheMomentClient {
 
             // Broadcast the QOTM request to port 8080.
             ch.writeAndFlush(new DatagramPacket(
-                    Unpooled.copiedBuffer("QOTM?", CharsetUtil.UTF_8),
+                    Unpooled.copiedBuffer("Login,j", CharsetUtil.UTF_8),
                     new InetSocketAddress("255.255.255.255", PORT))).sync();
 
             // QuoteOfTheMomentClientHandler will close the DatagramChannel when a

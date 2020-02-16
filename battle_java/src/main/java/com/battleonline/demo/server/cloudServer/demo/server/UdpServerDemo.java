@@ -1,4 +1,4 @@
-package com.battleonline.demo.cloudServer.demo.server;
+package com.battleonline.demo.server.cloudServer.demo.server;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelOption;
