@@ -9,10 +9,19 @@ public class User {
     private String username;    //用户名
     private String password;    //密码
     private String headImage;   //头像
-    private String sender;      //登录地址，用于建立玩家间通信（预计用Map）
+//    private String sender;      //登录地址，用于建立玩家间通信（预计用Map）
 
     //后续可能添加：战绩（胜负情况）、等级、好友等等
 
+    public User() {
+    }
+
+    public User(String uuid, String username, String password, String headImage) {
+        this.uuid = uuid;
+        this.username = username;
+        this.password = password;
+        this.headImage = headImage;
+    }
 
     public String getUuid() {
         return uuid;
@@ -46,21 +55,13 @@ public class User {
         this.headImage = headImage;
     }
 
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "uuid='" + uuid + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", headImage='" + headImage + '\'' +
-                ", sender='" + sender + '\'' +
                 '}';
     }
 

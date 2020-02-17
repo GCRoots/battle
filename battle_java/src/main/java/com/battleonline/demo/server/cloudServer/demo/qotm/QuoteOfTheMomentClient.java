@@ -51,7 +51,11 @@ public final class QuoteOfTheMomentClient {
 
             // Broadcast the QOTM request to port 8080.
             ch.writeAndFlush(new DatagramPacket(
-                    Unpooled.copiedBuffer("Login,j", CharsetUtil.UTF_8),
+//                    Unpooled.copiedBuffer("Register;{\"uuid\":\"123\",\"password\":\"123456\"," +
+//                            "\"username\":\"aaa\",\"headImage\":\"bnnnnn\"}", CharsetUtil.UTF_8),
+//                    new InetSocketAddress("255.255.255.255", PORT))).sync();
+
+            Unpooled.copiedBuffer("Login;{\"uuid\":\"123\",\"password\":\"aaa\"}", CharsetUtil.UTF_8),
                     new InetSocketAddress("255.255.255.255", PORT))).sync();
 
             // QuoteOfTheMomentClientHandler will close the DatagramChannel when a
