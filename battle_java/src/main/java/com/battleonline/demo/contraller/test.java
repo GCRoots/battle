@@ -27,7 +27,6 @@ public class test {
         user.setPassword("123789456");
         user.setUsername("aaa");
         user.setHeadImage("aa");
-        user.setSender("192.168.1.1");
 
         userService.insertUser(user);
     }

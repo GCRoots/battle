@@ -1,5 +1,6 @@
 package com.battleonline.demo.server.cloudServer;
 
+import com.battleonline.demo.dao.redis.RedisUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelOption;
@@ -24,8 +25,12 @@ public class CloudUdpServer implements Runnable{
     @Autowired
     CloudUdpServerHandler cloudUdpServerHandler;
 
+    @Autowired
+    RedisUtil redisUtil;
+
     @PostConstruct
     public void init() {
+
         nserver = new Thread(this);
         nserver.start();
     }

@@ -68,6 +68,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
 
             if (password.equals(user.getPassword())){
                 System.err.println(user.getUuid()+"\t登录成功！！！");
+
                 //将登录成功用户放入在线用户表中
                 String sender=datagramPacket.sender().toString();
                 redisUtil.set(uuid,password,60);
@@ -85,8 +86,14 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
 
 
         }
-        //退出
+        //退出  将玩家从在线列表删除
         else if (packets[0].equals("Quit")){
+
+
+
+        }
+        //查看  查看当前在线玩家，为下一步玩家匹配做准备
+        else if (packets[0].equals("View")){
 
 
 
@@ -96,6 +103,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
 
 
         }
+
 
 
     }
