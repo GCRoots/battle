@@ -14,6 +14,9 @@ import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.net.InetSocketAddress;
+import java.util.Arrays;
+
 /**
  * @author shipengfei
  * @data 2020/2/15
@@ -37,6 +40,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
         System.out.println(packets[1]);
 
         //注册
+        // "Register;{\"uuid\":\"123\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}"
         if (packets[0].equals("Register")){
             JSONObject jsonObject= JSON.parseObject(packets[1]);
             String uuid=jsonObject.getString("uuid");
@@ -59,6 +63,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
             }
         }
         //登录
+        // "Login;{\"uuid\":\"123\",\"password\":\"aaa\"}"
         else if (packets[0].equals("Login")){
             JSONObject jsonObject= JSON.parseObject(packets[1]);
             String uuid=jsonObject.getString("uuid");
@@ -70,8 +75,9 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
                 System.err.println(user.getUuid()+"\t登录成功！！！");
 
                 //将登录成功用户放入在线用户表中
-                String sender=datagramPacket.sender().toString();
-                redisUtil.set(uuid,password,60);
+                //sender格式:  /192.168.1.106:33014
+                redisUtil.hset("onlone_user",uuid,datagramPacket.sender().toString().substring(1));
+                System.out.println(datagramPacket.sender());
 
                 channelHandlerContext.write(new DatagramPacket(
                         Unpooled.copiedBuffer("TRUE:登录成功！！！",
@@ -86,20 +92,48 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
 
 
         }
-        //退出  将玩家从在线列表删除
-        else if (packets[0].equals("Quit")){
+        //退出  将玩家从在线列表删除        未测试，等匹配完成后同步测试
+        // "Exit;{\"uuid\":\"123\"}"
+        else if (packets[0].equals("Exit")){
+            JSONObject jsonObject= JSON.parseObject(packets[1]);
+            String uuid=jsonObject.getString("uuid");
 
+            //uuid在match_user表中，即当前想要下线的用户已参与匹配
+            if (redisUtil.hHasKey("match_user",uuid)){
+                String another= (String) redisUtil.hget("match_user",uuid);
+                redisUtil.hdel("match_user",uuid);
+                redisUtil.hdel("match_user",another);
 
+                String sender= (String) redisUtil.hget("onlone_user",another);
+                String[] senders=sender.split(":");
+
+                channelHandlerContext.write(new DatagramPacket(
+                        Unpooled.copiedBuffer("对方以离开！！！",
+                                CharsetUtil.UTF_8), new InetSocketAddress(senders[0], Integer.parseInt(senders[1]))));
+
+            }
+            //uuid在onlone_user表中，即当前想要下线的用户在线
+            if (redisUtil.hHasKey("onlone_user",uuid)){
+                redisUtil.hdel("onlone_user",uuid);
+
+            }
+
+            channelHandlerContext.write(new DatagramPacket(
+                    Unpooled.copiedBuffer("Exit:您以离线！！！",
+                            CharsetUtil.UTF_8), datagramPacket.sender()));
 
         }
         //查看  查看当前在线玩家，为下一步玩家匹配做准备
-        else if (packets[0].equals("View")){
-
+        else if (packets[0].equals("ViewOnline")){
+            JSONObject jsonObject= JSON.parseObject(packets[1]);
+            String uuid=jsonObject.getString("uuid");
 
 
         }
         //匹配  即游戏匹配，选择玩家进行游戏
         else if (packets[0].equals("Match")){
+            JSONObject jsonObject= JSON.parseObject(packets[1]);
+            String uuid=jsonObject.getString("uuid");
 
 
         }

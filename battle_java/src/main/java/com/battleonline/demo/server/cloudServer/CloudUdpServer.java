@@ -30,7 +30,6 @@ public class CloudUdpServer implements Runnable{
 
     @PostConstruct
     public void init() {
-
         nserver = new Thread(this);
         nserver.start();
     }
