@@ -2,6 +2,7 @@ package com.battleonline.demo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.battleonline.demo.dao.redis.RedisUtil;
 import com.battleonline.demo.pojo.User;
 import com.battleonline.demo.service.UserService;
 import com.battleonline.demo.service.imp.UserServiceImp;
@@ -17,5 +18,6 @@ public class Test {
         JSONObject jsonObject= JSON.parseObject(json);
         System.out.println(jsonObject);
         System.out.println(jsonObject.get("a"));
+
     }
 }

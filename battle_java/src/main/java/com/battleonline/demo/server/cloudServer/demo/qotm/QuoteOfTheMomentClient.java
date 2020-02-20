@@ -55,7 +55,7 @@ public final class QuoteOfTheMomentClient {
 //                            "\"username\":\"aaa\",\"headImage\":\"bnnnnn\"}", CharsetUtil.UTF_8),
 //                    new InetSocketAddress("255.255.255.255", PORT))).sync();
 
-            Unpooled.copiedBuffer("Login;{\"uuid\":\"123\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}", CharsetUtil.UTF_8),
+            Unpooled.copiedBuffer("ViewOnline;{\"uuid\":\"1234\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}", CharsetUtil.UTF_8),
                     new InetSocketAddress("255.255.255.255", PORT))).sync();
 
             // QuoteOfTheMomentClientHandler will close the DatagramChannel when a
