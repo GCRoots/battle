@@ -14,7 +14,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
  * @author shipengfei
- * @data 2020/2/17
+ * @data 2020/2/10
  */
 @Configuration
 @EnableCaching //开启注解
