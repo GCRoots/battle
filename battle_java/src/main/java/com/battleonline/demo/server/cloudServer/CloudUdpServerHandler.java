@@ -192,6 +192,14 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
                 redisUtil.hset("match_user",uuid,another);
                 redisUtil.hset("match_user",another,uuid);
 
+                //通知另一个玩家参与游戏
+                String sender= (String) redisUtil.hget("onlone_user_sender",another);
+                String[] senders=sender.split(":");
+
+                channelHandlerContext.write(new DatagramPacket(
+                        Unpooled.copiedBuffer("MATCHED:匹配成功！！！",
+                                CharsetUtil.UTF_8), new InetSocketAddress(senders[0], Integer.parseInt(senders[1]))));
+
                 channelHandlerContext.write(new DatagramPacket(
                         Unpooled.copiedBuffer("TRUE:匹配成功！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));

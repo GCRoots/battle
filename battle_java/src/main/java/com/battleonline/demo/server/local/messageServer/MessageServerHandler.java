@@ -1,4 +1,4 @@
-package com.battleonline.demo.server.localServer.messageServer;
+package com.battleonline.demo.server.local.messageServer;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
