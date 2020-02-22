@@ -24,6 +24,10 @@ public class LocalServerHandler extends SimpleChannelInboundHandler<DatagramPack
 
         String[] packets=datagramPacket.content().toString(CharsetUtil.UTF_8).split(";");
 
+        // 思路
+        // 1. 本地与云端前缀分开
+        // 2. 待定
+
         //注册
         // "Register;{\"uuid\":\"123\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}"
         if (packets[0].equals("Register")){
