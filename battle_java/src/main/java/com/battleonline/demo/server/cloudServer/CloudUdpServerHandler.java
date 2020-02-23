@@ -55,12 +55,12 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
             if (userService.findByUuid(uuid)!=null){
                 System.err.println("用户ID已存在！！！");
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("用户ID已存在！！！",
+                        Unpooled.copiedBuffer("Registered;False;用户ID已存在！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }else {
                 userService.insertUser(user);
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("注册成功！！",
+                        Unpooled.copiedBuffer("Registered;True;注册成功！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }
         }
@@ -75,7 +75,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
 
             if (user==null) {
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("FALSE:用户不存在！！！",
+                        Unpooled.copiedBuffer("Logined;False;用户不存在！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
                 return;
             }
@@ -90,12 +90,12 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
                 System.out.println(datagramPacket.sender());
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("TRUE:登录成功！！！",
+                        Unpooled.copiedBuffer("Logined;True;登录成功！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }else{
                 System.err.println("用户密码错误！！！");
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("FALSE:用户密码错误！！！",
+                        Unpooled.copiedBuffer("Logined;False;用户密码错误！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
 
             }
@@ -120,7 +120,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
                 String[] senders=sender.split(":");
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("对方以离开！！！",
+                        Unpooled.copiedBuffer("Exited;False;对方以离开！！！",
                                 CharsetUtil.UTF_8), new InetSocketAddress(senders[0], Integer.parseInt(senders[1]))));
 
             }
@@ -134,7 +134,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
             }
 
             channelHandlerContext.write(new DatagramPacket(
-                    Unpooled.copiedBuffer("Exit:您以离线！！！",
+                    Unpooled.copiedBuffer("Exited;True;您以离线！！！",
                             CharsetUtil.UTF_8), datagramPacket.sender()));
 
         }
@@ -166,11 +166,11 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
                 System.out.println(jsonObject1.toJSONString());
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("YES:"+jsonObject1.toJSONString(),
+                        Unpooled.copiedBuffer("ViewOnlined;True;"+jsonObject1.toJSONString(),
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }else {
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("NO:当期无玩家在线！！！",
+                        Unpooled.copiedBuffer("ViewOnlined;False;当期无玩家在线！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }
 
@@ -197,16 +197,16 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
                 String[] senders=sender.split(":");
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("MATCHED:匹配成功！！！",
+                        Unpooled.copiedBuffer("Matched;True;匹配成功！！！",
                                 CharsetUtil.UTF_8), new InetSocketAddress(senders[0], Integer.parseInt(senders[1]))));
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("TRUE:匹配成功！！！",
+                        Unpooled.copiedBuffer("Matched;True;匹配成功！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
 
             }else {
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("FALSE:匹配失败！！！",
+                        Unpooled.copiedBuffer("Matched;False;匹配失败！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
 
             }
@@ -230,7 +230,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
             }
 
             channelHandlerContext.write(new DatagramPacket(
-                    Unpooled.copiedBuffer("TRUE:退出游戏！！！",
+                    Unpooled.copiedBuffer("ExitGamed;True;退出游戏！！！",
                             CharsetUtil.UTF_8), datagramPacket.sender()));
 
         }

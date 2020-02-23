@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.battleonline.demo.server.cloudServer.demo.qotm;
+package com.battleonline.demo.server.qotm;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.Unpooled;
@@ -35,7 +35,7 @@ import java.net.InetSocketAddress;
  */
 public final class QuoteOfTheMomentClient {
 
-    static final int PORT = Integer.parseInt(System.getProperty("port", "7686"));
+    static final int PORT = Integer.parseInt(System.getProperty("port", "9999"));
 
     public static void main(String[] args) throws Exception {
 
@@ -55,7 +55,7 @@ public final class QuoteOfTheMomentClient {
 //                            "\"username\":\"aaa\",\"headImage\":\"bnnnnn\"}", CharsetUtil.UTF_8),
 //                    new InetSocketAddress("255.255.255.255", PORT))).sync();
 
-            Unpooled.copiedBuffer("ViewOnline;{\"uuid\":\"1234\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}", CharsetUtil.UTF_8),
+            Unpooled.copiedBuffer("Local;Login;{\"uuid\":\"1234\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}", CharsetUtil.UTF_8),
                     new InetSocketAddress("255.255.255.255", PORT))).sync();
 
             // QuoteOfTheMomentClientHandler will close the DatagramChannel when a

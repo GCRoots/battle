@@ -1,10 +1,12 @@
 package com.battleonline.demo.server.local.localServer;
 
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.util.CharsetUtil;
+import org.springframework.stereotype.Component;
 
 import java.net.InetSocketAddress;
 
@@ -12,9 +14,11 @@ import java.net.InetSocketAddress;
  * @author shipengfei
  * @data 2020/2/22
  */
+@Component
+@ChannelHandler.Sharable
 public class LocalServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
     //云端服务器ip、端口
-    private String IP_ADDRESS="172.0.0.1";
+    private String IP_ADDRESS="255.255.255.255";
     private int PORT=7686;
 
     @Override
@@ -28,45 +32,82 @@ public class LocalServerHandler extends SimpleChannelInboundHandler<DatagramPack
         // 1. 本地与云端前缀分开
         // 2. 待定
 
-        //注册
-        // "Register;{\"uuid\":\"123\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}"
-        if (packets[0].equals("Register")){
+        //本地大厅信息端与游戏端发送来的数据，去除前缀后直接发送至云端
+        //消息格式："Local/Game;方法名;{JSON字符串}"
+        if (packets[0].equals("Local")||packets[0].equals("Game")){
 
             channelHandlerContext.write(new DatagramPacket(
-                    Unpooled.copiedBuffer(datagramPacket.content().toString(),
+                    Unpooled.copiedBuffer(packets[1]+";"+packets[2],
                             CharsetUtil.UTF_8), new InetSocketAddress(IP_ADDRESS,PORT)));
 
+        }
+        //接受到来自云端的消息
+        else {
+            //注册
+            // "Register;{\"uuid\":\"123\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}"
+            if (packets[0].equals("Registered")){
+                if (packets[1].equals("True")){
+
+                }else {
+
+                }
+
+            }
+            //登录
+            // "Login;{\"uuid\":\"123\",\"password\":\"aaa\"}"
+            else if (packets[0].equals("Logined")){
+                if (packets[1].equals("True")){
+
+                }else {
+
+                }
+
+            }
+            //退出(退出游戏大厅)  将玩家从在线列表删除        未测试，等匹配完成后同步测试
+            // "Exit;{\"uuid\":\"123\"}"
+            else if (packets[0].equals("Exited")){
+                if (packets[1].equals("True")){
+
+                }else {
+
+                }
+
+            }
+            //查看  查看当前在线玩家，为下一步玩家匹配做准备
+            //还需完善，比如是否分表查询？
+            else if (packets[0].equals("ViewOnlined")){
+                if (packets[1].equals("True")){
+
+                }else {
+
+                }
+
+            }
+            //匹配  即游戏匹配，选择玩家进行游戏
+            //"Match;{\"uuid\":\"123\",\"another\":\"123\"}"
+            else if (packets[0].equals("Matched")){
+                if (packets[1].equals("True")){
+
+                }else {
+
+                }
+
+            }
+            //退出(退出游戏)  将玩家从匹配列表删除
+            // "ExitGame;{\"uuid\":\"123\"}"
+            else if (packets[0].equals("ExitGamed")){
+                if (packets[1].equals("True")){
+
+                }else {
+
+                }
+
+            }
 
         }
-        //登录
-        // "Login;{\"uuid\":\"123\",\"password\":\"aaa\"}"
-        else if (packets[0].equals("Login")){
 
 
-        }
-        //退出(退出游戏大厅)  将玩家从在线列表删除        未测试，等匹配完成后同步测试
-        // "Exit;{\"uuid\":\"123\"}"
-        else if (packets[0].equals("Exit")){
 
-        }
-        //查看  查看当前在线玩家，为下一步玩家匹配做准备
-        //还需完善，比如是否分表查询？
-        else if (packets[0].equals("ViewOnline")){
-
-
-        }
-        //匹配  即游戏匹配，选择玩家进行游戏
-        //"Match;{\"uuid\":\"123\",\"another\":\"123\"}"
-        else if (packets[0].equals("Match")){
-
-
-        }
-        //退出(退出游戏)  将玩家从匹配列表删除
-        // "ExitGame;{\"uuid\":\"123\"}"
-        else if (packets[0].equals("ExitGame")){
-
-
-        }
 
 
         }

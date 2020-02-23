@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.battleonline.demo.server.cloudServer.demo.qotm;
+package com.battleonline.demo.server.qotm;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelOption;
