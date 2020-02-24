@@ -41,6 +41,9 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
 
         System.out.println(packets[1]);
 
+        //C-L:Cloud-Local 云端到本地大厅端
+        //C-G:Cloud-Game  云端到本地游戏端
+
         //注册
         // "Register;{\"uuid\":\"123\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}"
         if (packets[0].equals("Register")){
@@ -55,12 +58,12 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
             if (userService.findByUuid(uuid)!=null){
                 System.err.println("用户ID已存在！！！");
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("Registered;False;用户ID已存在！！！",
+                        Unpooled.copiedBuffer("C-L;Registered;False;用户ID已存在！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }else {
                 userService.insertUser(user);
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("Registered;True;注册成功！！",
+                        Unpooled.copiedBuffer("C-L;Registered;True;注册成功！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }
         }
@@ -75,7 +78,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
 
             if (user==null) {
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("Logined;False;用户不存在！！！",
+                        Unpooled.copiedBuffer("C-L;Logined;False;用户不存在！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
                 return;
             }
@@ -85,17 +88,17 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
 
                 //将登录成功用户放入在线用户表中
                 //sender格式:  /192.168.1.106:33014
-                redisUtil.hset("onlone_user_sender",uuid,datagramPacket.sender().toString().substring(1));
-                redisUtil.hset("onlone_user_username",uuid,user.getUsername());
+                redisUtil.hset("online_user_sender",uuid,datagramPacket.sender().toString().substring(1));
+                redisUtil.hset("online_user_username",uuid,user.getUsername());
                 System.out.println(datagramPacket.sender());
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("Logined;True;登录成功！！！",
+                        Unpooled.copiedBuffer("C-L;Logined;True;登录成功！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }else{
                 System.err.println("用户密码错误！！！");
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("Logined;False;用户密码错误！！！",
+                        Unpooled.copiedBuffer("C-L;Logined;False;用户密码错误！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
 
             }
@@ -116,25 +119,25 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
                 redisUtil.hdel("match_user",another);
 
                 //通知未下线玩家对方已下线
-                String sender= (String) redisUtil.hget("onlone_user_sender",another);
+                String sender= (String) redisUtil.hget("online_user_sender",another);
                 String[] senders=sender.split(":");
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("Exited;False;对方以离开！！！",
+                        Unpooled.copiedBuffer("C-L;Exited;False;对方以离开！！！",
                                 CharsetUtil.UTF_8), new InetSocketAddress(senders[0], Integer.parseInt(senders[1]))));
 
             }
             //uuid在 onlone_user_sender 表中，即当前想要下线的用户在线
-            if (redisUtil.hHasKey("onlone_user_sender",uuid)){
-                redisUtil.hdel("onlone_user_sender",uuid);
+            if (redisUtil.hHasKey("online_user_sender",uuid)){
+                redisUtil.hdel("online_user_sender",uuid);
             }
             //uuid在 onlone_user_username 表中，即当前想要下线的用户在线
-            if (redisUtil.hHasKey("onlone_user_username",uuid)){
-                redisUtil.hdel("onlone_user_username",uuid);
+            if (redisUtil.hHasKey("online_user_username",uuid)){
+                redisUtil.hdel("online_user_username",uuid);
             }
 
             channelHandlerContext.write(new DatagramPacket(
-                    Unpooled.copiedBuffer("Exited;True;您以离线！！！",
+                    Unpooled.copiedBuffer("C-L;Exited;True;您以离线！！！",
                             CharsetUtil.UTF_8), datagramPacket.sender()));
 
         }
@@ -161,16 +164,18 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
             System.out.println();
 
             //onlone_user_username表中有数据，即当前有用户在线
-            if (redisUtil.hasKey("onlone_user_username")){
-                JSONObject jsonObject1= (JSONObject) JSONObject.toJSON(redisUtil.hmget("onlone_user_username"));;
+            if (redisUtil.hasKey("online_user_username")){
+                JSONObject jsonObject1= (JSONObject) JSONObject.toJSON(
+                        redisUtil.hmget("onloine_user_username"));;
                 System.out.println(jsonObject1.toJSONString());
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("ViewOnlined;True;"+jsonObject1.toJSONString(),
+                        Unpooled.copiedBuffer("C-L;ViewOnlined;True;"+
+                                        jsonObject1.toJSONString(),
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }else {
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("ViewOnlined;False;当期无玩家在线！！！",
+                        Unpooled.copiedBuffer("C-L;ViewOnlined;False;当期无玩家在线！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
             }
 
@@ -185,28 +190,28 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
             String another=jsonObject.getString("another");
 
             //双方玩家都在线
-            if (redisUtil.hHasKey("onlone_user_sender",uuid) &&
-                    redisUtil.hHasKey("onlone_user_sender",another)){
+            if (redisUtil.hHasKey("online_user_sender",uuid) &&
+                    redisUtil.hHasKey("online_user_sender",another)){
 
                 //将双方地址分别对放入 match_user 表
                 redisUtil.hset("match_user",uuid,another);
                 redisUtil.hset("match_user",another,uuid);
 
                 //通知另一个玩家参与游戏
-                String sender= (String) redisUtil.hget("onlone_user_sender",another);
+                String sender= (String) redisUtil.hget("online_user_sender", another);
                 String[] senders=sender.split(":");
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("Matched;True;匹配成功！！！",
+                        Unpooled.copiedBuffer("C-L;Matched;True;匹配成功！！！",
                                 CharsetUtil.UTF_8), new InetSocketAddress(senders[0], Integer.parseInt(senders[1]))));
 
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("Matched;True;匹配成功！！！",
+                        Unpooled.copiedBuffer("C-L;Matched;True;匹配成功！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
 
             }else {
                 channelHandlerContext.write(new DatagramPacket(
-                        Unpooled.copiedBuffer("Matched;False;匹配失败！！！",
+                        Unpooled.copiedBuffer("C-L;Matched;False;匹配失败！！！",
                                 CharsetUtil.UTF_8), datagramPacket.sender()));
 
             }
@@ -222,6 +227,15 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
             if (redisUtil.hHasKey("match_user",uuid)) {
                 String another= (String) redisUtil.hget("match_user",uuid);
 
+                //通知对方自己离开游戏
+                String sender= (String) redisUtil.hget("online_user_sender",another);
+                String[] senders=sender.split(":");
+
+                channelHandlerContext.write(new DatagramPacket(
+                        Unpooled.copiedBuffer("C-L;ExitGamed;False;对方离开游戏！！！",
+                                CharsetUtil.UTF_8), new InetSocketAddress(senders[0], Integer.parseInt(senders[1]))));
+
+
                 if (redisUtil.hHasKey("match_user",another)) {
                     redisUtil.hdel("match_user",another);
                 }
@@ -230,7 +244,7 @@ public class CloudUdpServerHandler  extends SimpleChannelInboundHandler<Datagram
             }
 
             channelHandlerContext.write(new DatagramPacket(
-                    Unpooled.copiedBuffer("ExitGamed;True;退出游戏！！！",
+                    Unpooled.copiedBuffer("C-L;ExitGamed;True;退出游戏！！！",
                             CharsetUtil.UTF_8), datagramPacket.sender()));
 
         }

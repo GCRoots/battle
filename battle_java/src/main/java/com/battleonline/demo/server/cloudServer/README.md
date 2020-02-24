@@ -54,10 +54,15 @@
 
 ####Redis中的数据表：
 
-- online_user:在线用户信息表 
+- onlone_user_sender:在线用户信息表 
 
   uuid，sender
 
-- playing_user:匹配成功，正在游戏用户信息表(相当于路由表)
+- onlone_user_username：在线用户信息表 
+
+  uuid，username
+
+- match_user:匹配成功，正在游戏用户信息表(相当于路由表)
 
   one_player,another_player
+  

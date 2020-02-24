@@ -18,8 +18,16 @@ import java.net.InetSocketAddress;
 @ChannelHandler.Sharable
 public class LocalServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
     //云端服务器ip、端口
-    private String IP_ADDRESS="255.255.255.255";
-    private int PORT=7686;
+    private String CLOUD_IP ="255.255.255.255";
+    private int CLOUD_PORT =7686;
+
+    //本地大厅端ip、端口
+    private String LOCAL_IP ="255.255.255.255";
+    private int LOCAL_PORT =7686;
+
+    //本地游戏端ip、端口
+    private String GAME_IP ="255.255.255.255";
+    private int GAME_PORT =7686;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, DatagramPacket datagramPacket) throws Exception {
@@ -38,11 +46,27 @@ public class LocalServerHandler extends SimpleChannelInboundHandler<DatagramPack
 
             channelHandlerContext.write(new DatagramPacket(
                     Unpooled.copiedBuffer(packets[1]+";"+packets[2],
-                            CharsetUtil.UTF_8), new InetSocketAddress(IP_ADDRESS,PORT)));
+                            CharsetUtil.UTF_8), new InetSocketAddress(CLOUD_IP, CLOUD_PORT)));
 
         }
         //接受到来自云端的消息
-        else {
+        //云端到本地大厅端
+        //消息格式："C-L/C-G;方法名;True/False;{JSON字符串}/字符串"
+        else if (packets[0].equals("C-L")) {
+
+
+        }
+        //云端到本地游戏端
+        else if (packets[0].equals("C-G")){
+
+
+
+        }
+
+        
+        //后续，转入本地大厅端用于对返回数据进行处理
+        {
+
             //注册
             // "Register;{\"uuid\":\"123\",\"password\":\"aaa\",\"username\":\"aaa\",\"headImage\":\"aaa\"}"
             if (packets[0].equals("Registered")){
@@ -95,18 +119,16 @@ public class LocalServerHandler extends SimpleChannelInboundHandler<DatagramPack
             }
             //退出(退出游戏)  将玩家从匹配列表删除
             // "ExitGame;{\"uuid\":\"123\"}"
-            else if (packets[0].equals("ExitGamed")){
-                if (packets[1].equals("True")){
+            else if (packets[0].equals("ExitGamed")) {
+                if (packets[1].equals("True")) {
 
-                }else {
+                } else {
 
                 }
 
             }
 
         }
-
-
 
 
 
