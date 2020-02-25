@@ -54,16 +54,22 @@ public class LocalServerHandler extends SimpleChannelInboundHandler<DatagramPack
         //消息格式："C-L/C-G;方法名;True/False;{JSON字符串}/字符串"
         else if (packets[0].equals("C-L")) {
 
+            channelHandlerContext.write(new DatagramPacket(
+                    Unpooled.copiedBuffer(packets[1]+";"+packets[2]+";"+packets[3],
+                            CharsetUtil.UTF_8), new InetSocketAddress(LOCAL_IP, LOCAL_PORT)));
 
         }
         //云端到本地游戏端
         else if (packets[0].equals("C-G")){
 
+            channelHandlerContext.write(new DatagramPacket(
+                    Unpooled.copiedBuffer(packets[1]+";"+packets[2]+";"+packets[3],
+                            CharsetUtil.UTF_8), new InetSocketAddress(GAME_IP, GAME_PORT)));
 
 
         }
 
-        
+
         //后续，转入本地大厅端用于对返回数据进行处理
         {
 
